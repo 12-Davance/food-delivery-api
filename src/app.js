@@ -13,6 +13,4 @@ app.use(morgan('combined'));
 
 app.use(express.json());
 
-app.use('/orders', ordersRouter);
-
 module.exports = app;
