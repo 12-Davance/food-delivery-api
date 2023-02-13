@@ -1,19 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-require('dotenv').config();
+require("dotenv").config();
 
-const MONGO_URL = process.env.MONGO_URL;
+const mongoDevUrl = process.env.MONGO_DEV_URL;
+const mongoUrl = process.env.MONGO_URL;
 
-mongoose.connection.once('open', () => {
-  console.log('MongoDB connection ready!');
+mongoose.connection.once("open", () => {
+  console.log("MongoDB connection ready!");
 });
 
-mongoose.connection.on('error', (err) => {
+mongoose.connection.on("error", (err) => {
   console.error(err);
 });
 
 async function mongoConnect() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(mongoDevUrl || mongoUrl);
 }
 
 async function mongoDisconnect() {
@@ -23,4 +24,4 @@ async function mongoDisconnect() {
 module.exports = {
   mongoConnect,
   mongoDisconnect,
-}
+};
