@@ -7,7 +7,7 @@ const vendorSchema = new mongoose.Schema({
     required: true,
     _id: false,
   },
-  branches: { type: [{ type: mongoose.Schema.ObjectId, ref: "Branch" }] },
+  branches: [{ type: mongoose.Schema.Types.ObjectId, ref: "Branch" }],
   avatar: { type: String },
   email: String,
   status: { type: String, default: "active", enum: ["inactive", "active"] },
