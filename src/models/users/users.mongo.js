@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const usersSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  lastName: { type: String },
   password: { type: String, required: true },
   phoneNumbers: { type: [String], required: true },
-  email: { type: String },
+  email: String,
   isLoggedIn: {
     type: { status: Boolean, timeStamp: Date },
     default: { status: false, timeStamp: Date.now() },
@@ -20,8 +20,8 @@ const usersSchema = new mongoose.Schema({
   },
   locations: { type: [{ lat: String, long: String }], required: true },
   avatar: String,
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
+  createdAt: Date,
+  updatedAt: Date,
 });
 
 // Connects usersSchema with the "users" collection

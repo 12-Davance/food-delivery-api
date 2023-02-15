@@ -69,19 +69,11 @@ const httpLoginUser = async (req, res) => {
 };
 
 const httpSignUpUser = async (req, res) => {
-  const { username, password, firstName, lastName, phoneNumbers, locations } =
-    req.body;
+  const { username, password, firstName, phoneNumbers, locations } = req.body;
 
   console.log("req.body", req.body);
 
-  if (
-    !username ||
-    !password ||
-    !firstName ||
-    !lastName ||
-    !locations ||
-    !phoneNumbers
-  )
+  if (!username || !password || !firstName || !locations || !phoneNumbers)
     return res
       .status(200)
       .json({ status: false, message: "missing required fields" });
@@ -98,6 +90,7 @@ const httpSignUpUser = async (req, res) => {
 
   const newUser = new User({
     ...req.body,
+    createdAt: Date.now(),
     password: securePassword,
   });
 
@@ -123,10 +116,14 @@ const httpSignUpUser = async (req, res) => {
 const httpUpdateUser = async (req, res) => {
   const body = req.body;
 
-  const response = await updateUser(body);
-  console.log("RESPONSE", response);
+  console.log("BODY", body);
 
-  return res.status(200).json({ status: true, data: response });
+  const result = await updateUser(body);
+  const { password, ...update } = result.toObject();
+
+  console.log("RESULT", result);
+
+  return res.status(200).json({ status: true, data: update });
 };
 
 module.exports = {
