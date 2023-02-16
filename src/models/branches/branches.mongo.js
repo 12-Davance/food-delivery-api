@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const branchSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  location: { type: { lat: String, long: String }, required: true },
+  location: { type: { lat: String, long: String }, required: true, _id: false },
   phoneNumbers: { type: [String], required: true },
-  working_days: {
+  workingDays: {
     type: [String],
     required: true,
     enum: [
@@ -17,7 +17,11 @@ const branchSchema = new mongoose.Schema({
       "Sunday",
     ],
   },
-  working_hours: { type: { start: String, end: String }, required: true },
+  workingHours: {
+    type: { start: String, end: String },
+    required: true,
+    _id: false,
+  },
   open: { type: Boolean, default: false },
   status: { type: String, default: "active", enum: ["inactive", "active"] },
   createdAt: Date,
