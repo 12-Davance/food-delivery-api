@@ -11,17 +11,3 @@ U
 .env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 P
  src/routes/users/users.router.js,a\5\a5684f49f570daeb27adbfce99994803862c0ab5
-T
-$src/routes/vendors/vendors.router.js,d\f\dfe0b096ba387db5f7c082503462ebd99c56f666
-O
-src/models/users/users.model.js,8\7\874795212f72256d10bdc1440c8602f8a674ded8
-S
-#src/models/vendors/vendors.model.js,c\0\c0b286b80d49787c931fc37b0df9b9147111321d
-O
-src/models/users/users.mongo.js,c\3\c32fa9eb9de69d6cc320f576ce5300bcb0611234
-T
-$src/routes/users/users.controller.js,c\7\c745322d30c037af634274e2f0f7ec35b48b4837
-S
-#src/models/vendors/vendors.mongo.js,c\3\c30ae59be426a353b47acb5c24ab7bd8c90eb050
-X
-(src/routes/vendors/vendors.controller.js,3\0\301685fdaf474dc2c63e824777dbeaf3068d2499

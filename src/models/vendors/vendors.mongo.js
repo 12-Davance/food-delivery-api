@@ -7,6 +7,7 @@ const vendorSchema = new mongoose.Schema({
     required: true,
     _id: false,
   },
+  category: String,
   branches: { type: [{ type: mongoose.Schema.ObjectId, ref: "Branch" }] },
   avatar: { type: String },
   email: String,
