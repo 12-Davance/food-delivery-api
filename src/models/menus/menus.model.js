@@ -1,14 +1,12 @@
 const Menu = require("./menus.mongo");
 
 const getMenus = async (branchId) => {
-  // get menus query
   return Menu.find({ branchId })
     .then((res) => res)
     .catch((err) => err);
 };
 
 const createMenu = async (menu) => {
-  // create menu query
   console.log("CREATED MENU", menu);
   return Menu.create(menu)
     .then((response) => response)
@@ -16,7 +14,6 @@ const createMenu = async (menu) => {
 };
 
 const updateMenu = async (menu) => {
-  // update menu query
   const { menuId } = menu;
 
   return Menu.findOneAndUpdate(

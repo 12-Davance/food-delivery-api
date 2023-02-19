@@ -34,10 +34,8 @@ const httpCreateVendor = async (req, res) => {
     createdAt: Date.now(),
   });
 
-  // create vendor user credentials
   await createUser(username, password, "vendor", vendor._id);
 
-  // create vendor user
   const result = await createVendor(vendor);
 
   console.log("RESULT", result);

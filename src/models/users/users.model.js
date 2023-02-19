@@ -35,7 +35,6 @@ const findUser = async (username, type) => {
 };
 
 const login = async (username) => {
-  // login logic
   return User.findOneAndUpdate(
     { username },
     { $set: { isLoggedIn: { status: true, timeStamp: Date.now() } } },
@@ -46,7 +45,6 @@ const login = async (username) => {
 };
 
 const createUser = async (username, password, type, owner) => {
-  // create user logic
   const saltPassword = await bcrypt.genSalt(12);
   const securePassword = await bcrypt.hash(password, saltPassword);
 
@@ -71,7 +69,6 @@ const createUser = async (username, password, type, owner) => {
 };
 
 const updateUser = async (user) => {
-  // update user logic
   const { owner, password } = user;
   const saltPassword = await bcrypt.genSalt(12);
   const securePassword = await bcrypt.hash(password, saltPassword);

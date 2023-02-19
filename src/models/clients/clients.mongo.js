@@ -17,9 +17,8 @@ const clientsSchema = new Schema({
   },
   email: String,
   avatar: String,
-  createdAt: Date, // this
-  updatedAt: Date, // this
+  createdAt: Date,
+  updatedAt: Date,
 });
 
-// Connects clientsSchema with the "users" collection
 module.exports = model("Client", clientsSchema);

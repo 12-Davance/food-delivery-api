@@ -119,15 +119,12 @@ const httpLoginUser = async (req, res) => {
   };
 
   if (type === "admin") {
-    // admin logic
     const { _doc } = await findAdmin(result.owner);
     userData = { ...userData, ..._doc };
   } else if (type === "client") {
-    // client logic
     const { _doc } = await findClient(result.owner);
     userData = { ...userData, ..._doc };
   } else if (type === "vendor") {
-    // vendor logic
     const { _doc } = await findVendor(result.owner);
     userData = { ...userData, ..._doc };
   }

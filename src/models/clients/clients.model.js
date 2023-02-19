@@ -7,7 +7,6 @@ const findClient = async (adminId) => {
 };
 
 const createClient = async (client) => {
-  // create client query
   console.log("CLIENT", client);
 
   return Client.create(client)
@@ -16,7 +15,6 @@ const createClient = async (client) => {
 };
 
 const updateClient = async (client) => {
-  // update client query
   const { clientId } = client;
   return Client.findOneAndUpdate(
     { _id: clientId },

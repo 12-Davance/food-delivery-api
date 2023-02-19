@@ -24,5 +24,4 @@ const usersSchema = new Schema({
   updatedAt: Date,
 });
 
-// Connects usersSchema with the "users" collection
 module.exports = model("User", usersSchema);

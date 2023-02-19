@@ -6,7 +6,6 @@ const { findUser, createUser } = require("../../models/users/users.model");
 const Client = require("../../models/clients/clients.mongo");
 
 const httpCreateClient = async (req, res) => {
-  // create client request
   const { username, password, ...rest } = req.body;
   const { firstName, locations } = rest;
 
@@ -27,10 +26,8 @@ const httpCreateClient = async (req, res) => {
     createdAt: Date.now(),
   });
 
-  // create client user credential
   await createUser(username, password, "client", client._id);
 
-  // create client user
   const result = await createClient(client);
 
   console.log("RESULT", result);
@@ -43,7 +40,6 @@ const httpCreateClient = async (req, res) => {
 };
 
 const httpUpdateClient = async (req, res) => {
-  // update client request
   const { clientId } = req.body;
 
   if (!clientId)
@@ -51,7 +47,6 @@ const httpUpdateClient = async (req, res) => {
       .status(200)
       .json({ status: false, message: "missing required fields" });
 
-  // update admin user
   const result = await updateClient(req.body);
 
   console.log("RESULT", result);
