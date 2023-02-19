@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const menuSchema = new mongoose.Schema({
-  categories: [
-    {
-      name: String,
-      avatar: String,
-      menuItems: [{ type: mongoose.Schema.ObjectId, ref: "MenuItem" }],
-    },
-  ],
+const menuSchema = new Schema({
+  branchId: Schema.ObjectId,
+  name: String,
+  description: String,
+  status: { type: String, enum: ["active", "inactive"], default: "inactive" },
+  createdAt: Date,
+  updatedAt: Date,
 });
 
-module.exports = mongoose.model("Menu", menuSchema);
+module.exports = model("Menu", menuSchema);

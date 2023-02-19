@@ -1,13 +1,63 @@
 
-O
-src/models/menus/menus.model.js,3\2\32b6fe19d3d5320b3990b70213b86934edc30447
-Y
-)src/models/menu-items/menu-items.mongo.js,b\7\b789867c12e900edf5b0e62efa5ef8648f148131
-O
-src/models/menus/menus.mongo.js,7\c\7c0be4f84ca49fb372f47189fdc955fa8c48969a
-U
-%src/models/branches/branches.mongo.js,5\f\5f5d6a53f7590265f6c726458167539f1feec4f9
 4
 .env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+S
+#src/models/ratings/ratings.model.js,1\2\120f94028ef1aafc368fd62ae7232afcdccc15b6
+T
+$src/routes/ratings/ratings.router.js,b\2\b2bfba30649dd33160c6b8fe22518344c35e1a39
+X
+(src/routes/ratings/ratings.controller.js,b\8\b85e968fe705af01e167fd6c092894a79d3df54d
+S
+#src/models/ratings/ratings.mongo.js,9\e\9ee2a492e984a36e8c2f416913165de4cedcffd9
 P
  src/routes/users/users.router.js,a\5\a5684f49f570daeb27adbfce99994803862c0ab5
+T
+$src/routes/clients/clients.router.js,b\1\b1a459d643dd2bdd2c31aaccda6b38e82e444f24
+S
+#src/models/clients/clients.mongo.js,c\7\c71528a740d8b9132e330b518fbeb4a82a7564c7
+S
+#src/models/clients/clients.model.js,8\1\81234449a91a91189c976f62846170667ea64093
+T
+$src/routes/vendors/vendors.router.js,d\f\dfe0b096ba387db5f7c082503462ebd99c56f666
+X
+(src/routes/clients/clients.controller.js,d\9\d9e9cb7bbb16e1417db8afc5b640500f9b344917
+O
+src/models/users/users.mongo.js,c\3\c32fa9eb9de69d6cc320f576ce5300bcb0611234
+Q
+!src/models/admins/admins.model.js,b\9\b967b0952384496f441722f86824bbdc93b4dcc9
+S
+#src/models/vendors/vendors.mongo.js,c\3\c30ae59be426a353b47acb5c24ab7bd8c90eb050
+T
+$src/routes/users/users.controller.js,c\7\c745322d30c037af634274e2f0f7ec35b48b4837
+O
+src/models/users/users.model.js,8\7\874795212f72256d10bdc1440c8602f8a674ded8
+V
+&src/routes/admins/admins.controller.js,8\2\82334aa82550ce14a8f2750f314832b00edd9b6c
+S
+#src/models/vendors/vendors.model.js,c\0\c0b286b80d49787c931fc37b0df9b9147111321d
+X
+(src/routes/vendors/vendors.controller.js,3\0\301685fdaf474dc2c63e824777dbeaf3068d2499
+O
+src/models/menus/menus.model.js,3\2\32b6fe19d3d5320b3990b70213b86934edc30447
+P
+ src/routes/menus/menus.router.js,4\b\4b0429ee1c4d4c342ae612da03d1b090d41c95b2
+T
+$src/routes/menus/menus.controller.js,4\1\4133eb913fc59fe9652d0b028edb0138a8798168
+O
+src/models/menus/menus.mongo.js,7\c\7c0be4f84ca49fb372f47189fdc955fa8c48969a
+V
+&src/routes/branches/branches.router.js,8\f\8fa526d2399a3419eba64188168e4bd26a85edb7
+Z
+*src/routes/branches/branches.controller.js,3\1\318ae5139fd96bc78754f6fcf01134c337c0636b
+U
+%src/models/branches/branches.model.js,5\3\53800a4cf574faf3d0fd50b3e34a75a48ed5fb81
+U
+%src/models/branches/branches.mongo.js,5\f\5f5d6a53f7590265f6c726458167539f1feec4f9
+d
+4src/routes/menu-categories/menu-categories.router.js,8\0\801628ab308b0d907f9c769f3cac4ede4837a648
+c
+3src/models/menu-categories/menu-categories.mongo.js,9\d\9dc531196e85f9cc6ed2d751d85d33488f271281
+c
+3src/models/menu-categories/menu-categories.model.js,6\1\616dddcbc62ffdc78b332bd5295696fc0d4d0755
+h
+8src/routes/menu-categories/menu-categories.controller.js,9\3\9358b83608f0758c0c91b36407b940a645a91aee

@@ -1,9 +1,11 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require("mongoose");
 
-const ratingSchema = new mongoose.Schema({
-  score: {type: Number, required: true},
-  comment: {type: String},
+const ratingSchema = new Schema({
+  score: { type: Number, required: true },
+  comment: { type: String },
+  target: { type: Schema.ObjectId },
+  createdAt: Date,
+  updatedAt: Date,
 });
 
-
-module.exports = mongoose.model('Rating', ratingSchema);
+module.exports = model("Rating", ratingSchema);

@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const branchSchema = new mongoose.Schema({
+const branchSchema = new Schema({
+  vendorId: { type: Schema.ObjectId, ref: "Vendor" },
   name: { type: String, required: true },
   location: { type: { lat: String, long: String }, required: true, _id: false },
   phoneNumbers: { type: [String], required: true },
@@ -26,8 +27,6 @@ const branchSchema = new mongoose.Schema({
   status: { type: String, default: "active", enum: ["inactive", "active"] },
   createdAt: Date,
   updatedAt: Date,
-  menu: { type: mongoose.Schema.ObjectId, ref: "Menu" },
-  ratings: [{ type: mongoose.Schema.ObjectId, ref: "Rating" }],
 });
 
-module.exports = mongoose.model("Branch", branchSchema);
+module.exports = model("Branch", branchSchema);

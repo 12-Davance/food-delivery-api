@@ -3,8 +3,8 @@ const {
   createVendor,
   updateVendor,
 } = require("../../models/vendors/vendors.model");
+const { createUser, findUser } = require("../../models/users/users.model");
 const Vendor = require("../../models/vendors/vendors.mongo");
-const bcrypt = require("bcrypt");
 
 const httpGetVendors = async (req, res) => {
   const vendors = await getVendors();
@@ -13,55 +13,59 @@ const httpGetVendors = async (req, res) => {
 };
 
 const httpCreateVendor = async (req, res) => {
-  const { name, credential } = req.body;
+  const { username, password, ...rest } = req.body;
+  const { name, category } = rest;
   console.log("BODY", req.body);
 
-  if (!name || !credential.username || !credential.password)
+  if (!name || !category || !username || !password)
     return res
       .status(200)
       .json({ status: false, message: "missing required fields" });
 
-  const saltPassword = await bcrypt.genSalt(12);
-  const securePassword = await bcrypt.hash(credential.password, saltPassword);
+  const user = await findUser(username, "vendor");
 
-  const newVendor = new Vendor({
+  if (user)
+    return res
+      .status(200)
+      .json({ status: false, message: "vendor already exists!" });
+
+  const vendor = new Vendor({
     ...req.body,
-    credential: {
-      ...req.body.credential,
-      password: securePassword,
-    },
     createdAt: Date.now(),
   });
 
-  const result = await createVendor(newVendor);
+  // create vendor user credentials
+  await createUser(username, password, "vendor", vendor._id);
+
+  // create vendor user
+  const result = await createVendor(vendor);
 
   console.log("RESULT", result);
 
-  const createdVendor = result.toObject();
-
-  delete createdVendor["credential"];
-
-  console.log("CREATED VENDOR", createdVendor);
-
   return res.status(201).json({
     status: true,
-    message: "Vendor creation successful",
-    data: createdVendor,
+    message: "success",
+    data: result,
   });
 };
 
 const httpUpdateVendor = async (req, res) => {
-  const body = req.body;
+  const { vendorId } = req.body;
 
-  console.log("BODY", body);
+  console.log("BODY", req.body);
 
-  const result = await updateVendor(body);
+  if (!vendorId)
+    return res
+      .status(200)
+      .json({ status: false, message: "missing required fields" });
 
-  const { credential, ...update } = result.toObject();
+  const result = await updateVendor(req.body);
 
   console.log("RESULT", result);
 
-  return res.status(200).json({ status: true, data: update });
+  return res
+    .status(200)
+    .json({ status: true, message: "success", data: result });
 };
 
 module.exports = {

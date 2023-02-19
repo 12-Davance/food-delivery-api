@@ -1,25 +1,34 @@
-const Vendor = require("../vendors/vendors.mongo");
-const Branch = require("../branches/branches.mongo");
+const Branch = require("./branches.mongo");
 
 const getBranches = async (vendorId) => {
-  //  await Vendor.findById(vendorId)
-};
-
-const createBranch = async (branch) => {
-  const { vendorId, ...rest } = branch;
-  const newBranch = new Branch(rest);
-  console.log("FOUND VENDOR", vendorId);
-  console.log("BRANCH", newBranch);
-  await Vendor.update({ _id: vendorId }, { $push: { branches: newBranch } });
-
-  return Branch.create(newBranch)
-    .then((data) => data)
+  return Branch.find({ vendorId })
+    .then((res) => res)
     .catch((err) => err);
 };
 
-const updateBranch = () => {};
+const createBranch = async (branch) => {
+  console.log("CREATED BRANCH", branch);
+  return Branch.create(branch)
+    .then((response) => response)
+    .catch((err) => err);
+};
+
+const updateBranch = async (branch) => {
+  const { branchId } = branch;
+
+  return Branch.findOneAndUpdate(
+    { _id: branchId },
+    {
+      $set: branch,
+    },
+    { new: true }
+  )
+    .then((response) => response)
+    .catch((err) => err);
+};
 
 module.exports = {
   createBranch,
   updateBranch,
+  getBranches,
 };

@@ -1,6 +1,7 @@
 const {
   createBranch,
   updateBranch,
+  getBranches,
 } = require("../../models/branches/branches.model");
 const Branch = require("../../models/branches/branches.mongo");
 
@@ -23,27 +24,58 @@ const httpCreateBranch = async (req, res) => {
       .status(200)
       .json({ status: false, message: "missing required fields" });
 
-  const result = await createBranch({
+  const branch = new Branch({
     ...req.body,
     createdAt: Date.now(),
   });
 
+  const result = await createBranch(branch);
+
   console.log("RESULT", result);
-
-  const createdBranch = result.toObject();
-
-  console.log("CREATED BRANCH", createdBranch);
 
   return res.status(201).json({
     status: true,
-    message: "Branch creation successful",
-    data: createdBranch,
+    message: "success",
+    data: result,
   });
 };
 
-const httpUpdateBranch = (req, res) => {};
+const httpUpdateBranch = async (req, res) => {
+  const { branchId } = req.body;
+
+  console.log("REQUEST.BODY", req.body);
+
+  if (!branchId)
+    return res
+      .status(200)
+      .json({ status: false, message: "missing required fields" });
+
+  let updatedBranch = {
+    ...req.body,
+    updatedAt: Date.now(),
+  };
+
+  const result = await updateBranch(updatedBranch);
+
+  console.log("RESULT", result);
+
+  return res.status(201).json({
+    status: true,
+    message: "success",
+    data: result,
+  });
+};
+
+const httpGetBranches = async (req, res) => {
+  const vendorId = req.query.vendorId;
+
+  const result = await getBranches(vendorId);
+
+  return res.status(200).json({ status: true, data: result });
+};
 
 module.exports = {
   httpCreateBranch,
   httpUpdateBranch,
+  httpGetBranches,
 };

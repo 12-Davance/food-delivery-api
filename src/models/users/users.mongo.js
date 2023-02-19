@@ -1,16 +1,18 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const usersSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String },
+const usersSchema = new Schema({
+  owner: Schema.ObjectId,
+  username: { type: String, required: true },
   password: { type: String, required: true },
-  phoneNumbers: { type: [String], required: true },
-  email: String,
+  type: { type: String, enum: ["client", "admin", "vendor"], required: true },
   isLoggedIn: {
     type: { status: Boolean, timeStamp: Date },
-    default: { status: false, timeStamp: Date.now() },
+    default: { status: false },
     _id: false,
+  },
+  activationCode: {
+    type: { code: String, createdAt: Date, updatedAt: Date },
+    required: true,
   },
   usageStatus: {
     type: String,
@@ -18,11 +20,9 @@ const usersSchema = new mongoose.Schema({
     enum: ["active", "inactive", "pending"],
     required: true,
   },
-  locations: { type: [{ lat: String, long: String }], required: true },
-  avatar: String,
   createdAt: Date,
   updatedAt: Date,
 });
 
 // Connects usersSchema with the "users" collection
-module.exports = mongoose.model("User", usersSchema);
+module.exports = model("User", usersSchema);

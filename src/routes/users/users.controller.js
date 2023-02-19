@@ -1,134 +1,160 @@
 const {
   login,
-  signUp,
   updateUser,
   findUser,
+  activateAccount,
+  resetActivation,
 } = require("../../models/users/users.model");
-const User = require("../../models/users/users.mongo");
+const { findAdmin } = require("../../models/admins/admins.model");
+const { findClient } = require("../../models/clients/clients.model");
+const { findVendor } = require("../../models/vendors/vendors.model");
 const bcrypt = require("bcrypt");
 
-const httpIsUserLoggedIn = async (req, res) => {
-  const username = req.query.username;
-  console.log(req.query);
-
-  const checkDateDiff = (date) => {
-    return (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-  };
-
-  const result = await findUser(username);
-  let isLoggedIn;
-
-  if (result.isLoggedIn.status) {
-    isLoggedIn = {
-      timeStamp: result.isLoggedIn.timeStamp,
-      status: checkDateDiff(result.isLoggedIn.timeStamp) < 7,
-    };
-  }
-
-  console.log("RESULT", isLoggedIn);
-  console.log("DATE DIFF", checkDateDiff(result.isLoggedIn.timeStamp));
-
-  return res.status(200).json({ status: true, result: isLoggedIn });
+const checkDateDiff = (date) => {
+  return (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
 };
 
-const httpLoginUser = async (req, res) => {
-  const { username, password } = req.body;
+const httpConfirmEmail = async (req, res) => {
+  const { username, code } = req.body;
 
-  console.log("req.body", req.body);
-
-  if (!username || !password)
+  if (!code)
     return res
       .status(200)
       .json({ status: false, message: "missing required fields" });
 
-  const user = await findUser(username);
+  const user = await findUser(username, "client");
+
+  if (!user)
+    return res
+      .status(200)
+      .json({ status: false, message: "user does not exist" });
+
+  let response;
+
+  if (checkDateDiff(user.activationCode.createdAt) < 1) {
+    if (code === user.activationCode.code) {
+      await activateAccount(username);
+      response = { status: true, message: "success" };
+    } else {
+      response = { status: false, message: "invalid code" };
+    }
+  } else {
+    // if the code hasn't been used for more than 24 hours
+    await resetActivation(username);
+    response = {
+      status: true,
+      message: "your activation has been reset, please check your email",
+    };
+  }
+
+  return res.status(200).json(response);
+};
+
+const httpIsUserLoggedIn = async (req, res) => {
+  const username = req.query.username;
+  const userType = req.query.type;
+  console.log(req.query);
+
+  const user = await findUser(username, userType);
+  console.log("USER == ", user);
+
+  if (!user)
+    return res
+      .status(200)
+      .json({ status: false, message: "user does not exist" });
+
+  let isLoggedIn;
+
+  if (user.isLoggedIn.status) {
+    console.log("DATE DIFF", checkDateDiff(user.isLoggedIn.timeStamp));
+    isLoggedIn = {
+      timeStamp: user.isLoggedIn.timeStamp,
+      status: checkDateDiff(user.isLoggedIn.timeStamp) < 7,
+    };
+  } else {
+    isLoggedIn = {
+      status: false,
+    };
+  }
+
+  console.log("RESULT", isLoggedIn);
+
+  return res.status(200).json({ status: true, data: isLoggedIn });
+};
+
+const httpLoginUser = async (req, res) => {
+  const { username, password, type } = req.body;
+
+  console.log("req.body", req.body);
+
+  if (!username || !password || !type)
+    return res
+      .status(200)
+      .json({ status: false, message: "missing required fields" });
+
+  const user = await findUser(username, type);
 
   console.log("FOUND USER DATA", user);
 
   if (!user)
     return res
       .status(200)
-      .json({ status: false, message: "User does not exist" });
+      .json({ status: false, message: "user does not exist" });
 
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword)
-    return res.status(200).json({ status: false, message: "Invalid password" });
+    return res.status(200).json({ status: false, message: "invalid password" });
+
+  if (user.type === "client" && user.usageStatus === "pending")
+    return res.status(403).json({
+      status: false,
+      message: "please confirm your email first",
+    });
 
   const result = await login(username);
 
-  const loggedInUser = result.toObject();
+  let userData = {
+    username,
+  };
 
-  console.log("LOGGED IN USER", loggedInUser);
+  if (type === "admin") {
+    // admin logic
+    const { _doc } = await findAdmin(result.owner);
+    userData = { ...userData, ..._doc };
+  } else if (type === "client") {
+    // client logic
+    const { _doc } = await findClient(result.owner);
+    userData = { ...userData, ..._doc };
+  } else if (type === "vendor") {
+    // vendor logic
+    const { _doc } = await findVendor(result.owner);
+    userData = { ...userData, ..._doc };
+  }
 
-  delete loggedInUser["password"];
+  console.log("USER DATA", userData);
 
-  console.log("USER DATA RETURNED AFTER LOGIN", loggedInUser);
-
-  return res.status(200).json({ status: true, data: loggedInUser });
+  return res.status(200).json({ status: true, data: userData });
 };
 
-const httpSignUpUser = async (req, res) => {
-  const { username, password, firstName, phoneNumbers, locations } = req.body;
+const httpUpdateUser = async (req, res) => {
+  const { owner, password } = req.body;
 
-  console.log("req.body", req.body);
+  console.log("BODY", req.body);
 
-  if (!username || !password || !firstName || !locations || !phoneNumbers)
+  if (!owner || !password)
     return res
       .status(200)
       .json({ status: false, message: "missing required fields" });
 
-  const user = await findUser(username);
+  await updateUser(req.body);
 
-  if (user)
-    return res
-      .status(200)
-      .json({ status: false, message: "User already exists!" });
-
-  const saltPassword = await bcrypt.genSalt(12);
-  const securePassword = await bcrypt.hash(password, saltPassword);
-
-  const newUser = new User({
-    ...req.body,
-    createdAt: Date.now(),
-    password: securePassword,
-  });
-
-  console.log("Signed up user", newUser);
-
-  const result = await signUp(newUser);
-
-  console.log("RESULT", result);
-
-  const signedUpUser = result.toObject();
-
-  delete signedUpUser["password"];
-
-  console.log("SIGNED UP USER", signedUpUser);
-
-  return res.status(201).json({
-    status: true,
-    message: "User sign up successful",
-    data: signedUpUser,
-  });
-};
-
-const httpUpdateUser = async (req, res) => {
-  const body = req.body;
-
-  console.log("BODY", body);
-
-  const result = await updateUser(body);
-  const { password, ...update } = result.toObject();
-
-  console.log("RESULT", result);
-
-  return res.status(200).json({ status: true, data: update });
+  return res.status(200).json({ status: true, message: "success", data: null });
 };
 
 module.exports = {
   httpLoginUser,
-  httpSignUpUser,
   httpUpdateUser,
   httpIsUserLoggedIn,
+  httpConfirmEmail,
 };
